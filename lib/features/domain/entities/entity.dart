@@ -4,7 +4,7 @@ class TaskEntity {
   final String colorIndex;
   final String time;
   final bool isCompletedTask;
-  final String notification;
+  final bool notification;
   final String taskType;
   TaskEntity({
     this.title,

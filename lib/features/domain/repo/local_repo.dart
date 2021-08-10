@@ -6,6 +6,6 @@ abstract class LocalRepository {
   Future<void> updateTask(TaskEntity task);
   Future<void> getNotificationTask(TaskEntity task);
   Future<void> turnOffNotificationTask(TaskEntity task);
-  Future<void> getAllTask();
+  Future<List<TaskEntity>> getAllTask();
   Future<void> openDataBase();
 }

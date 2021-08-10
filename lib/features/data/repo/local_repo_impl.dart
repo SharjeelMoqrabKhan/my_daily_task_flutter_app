@@ -16,7 +16,7 @@ class LocalRepositoryImpl implements LocalRepository {
   Future<void> deleteTask(TaskEntity task) => localDataSouce.deleteTask(task);
 
   @override
-  Future<void> getAllTask() => localDataSouce.getAllTask();
+  Future<List<TaskEntity>> getAllTask() => localDataSouce.getAllTask();
 
   @override
   Future<void> getNotificationTask(TaskEntity task) =>
