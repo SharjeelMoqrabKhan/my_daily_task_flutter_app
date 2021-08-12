@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_daily_task_flutter_app/features/data/local_data_store/local_data_source.dart';
 import 'package:my_daily_task_flutter_app/features/data/models/task_model.dart';
 import 'package:my_daily_task_flutter_app/features/domain/entities/entity.dart';
@@ -12,7 +13,8 @@ const String MAP_STORE = "MAP_STORE_TASK";
 class LocalDataSourceImplement implements LocalDataSouce {
   Future<Database> get _db async => _dbOpenCompleter.future;
   final _taskStore = intMapStoreFactory.store(MAP_STORE);
-
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   Completer<Database> _dbOpenCompleter;
   Future _initDatabase() async {
     final appDocumentDir = await getApplicationDocumentsDirectory();
@@ -54,8 +56,31 @@ class LocalDataSourceImplement implements LocalDataSouce {
   }
 
   @override
-  Future<void> getNotificationTask(TaskEntity task) {
-    throw UnimplementedError();
+  Future<void> getNotificationTask(TaskEntity task) async {
+    if (task.notification == false) {
+      final date = DateTime.parse(task.time);
+      final andoridChannel = AndroidNotificationDetails(
+        task.id.toString(),
+        "Daily Task Notification",
+        "Daily Task Notification",
+        icon: "@mipmap/ic_launcer",
+        largeIcon: DrawableResourceAndroidBitmap(
+          "@mipmap/ic_launcer",
+        ),
+      );
+      final iOSChannel = IOSNotificationDetails();
+      final notificaionDetails =
+          NotificationDetails(android: andoridChannel, iOS: iOSChannel);
+      flutterLocalNotificationsPlugin.showDailyAtTime(
+        task.id,
+        task.title,
+        "it's time for ${task.title}",
+        Time(date.hour,date.minute,date.second),
+        notificaionDetails,
+      );
+    } else {
+      flutterLocalNotificationsPlugin.cancel(task.id);
+    }
   }
 
   @override
